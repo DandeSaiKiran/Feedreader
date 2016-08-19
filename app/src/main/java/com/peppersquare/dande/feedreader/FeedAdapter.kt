@@ -13,7 +13,7 @@ import java.util.*
 /**
  * Created by dande on 11-08-2016.
  */
-class FeedAdapter(val feedItems: ArrayList<FeedModel>) : RecyclerView.Adapter<FeedAdapter.FeedHolder>() {
+class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>) : RecyclerView.Adapter<FeedAdapter.FeedHolder>() {
 
     override fun getItemCount(): Int {
         return feedItems.size
@@ -30,14 +30,13 @@ class FeedAdapter(val feedItems: ArrayList<FeedModel>) : RecyclerView.Adapter<Fe
 
     class FeedHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(feedItems: ArrayList<FeedModel>) {
+        fun bindData(feedItems: ArrayList<FeedReaderModel>) {
 
             val feedmodel = feedItems[adapterPosition]
 
             itemView.textView_title.text = feedmodel.title
             itemView.textView_author.text = feedmodel.author
             itemView.textView_description.text = feedmodel.description
-            itemView.imageView.setImageResource(feedmodel.image)
         }
 
     }
