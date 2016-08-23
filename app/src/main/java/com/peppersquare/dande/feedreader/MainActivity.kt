@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_post_data.*
+import kotlinx.android.synthetic.main.feedlist.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,20 +46,18 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<List<FeedReaderModel>>?, response: Response<List<FeedReaderModel>>) {
                 if (response.isSuccessful) {
+
                     arrayList.addAll(response.body())
                     feedAdapter.notifyDataSetChanged()
+
+                    Log.e(TAG,"get data : " +response)
                 }
             }
-
         })
-
-
-
-
-
         fab.setOnClickListener { view ->
             val intent = Intent(view?.context, PostData::class.java)
             startActivityForResult(intent, POST_REQUEST_CODE)
+
         }
     }
 
@@ -65,19 +65,56 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == POST_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
 
-                val title = resultIntent?.getStringExtra("title")
-                val author = resultIntent?.getStringExtra("author")
-                val description = resultIntent?.getStringExtra("description")
+            Log.e(TAG, "GET " + resultCode)
+            val title = resultIntent?.getStringExtra("title")
+            val author = resultIntent?.getStringExtra("author")
+            val description = resultIntent?.getStringExtra("description")
+         //   val image = resultIntent?.getStringExtra("image")
 
 
-                val feedModel = FeedReaderModel(title = title!!,
+
+            val feedApi1: FeedApi = FeedClient().getClient().create(FeedApi::class.java)
+
+            val call1: Call<FeedReaderModel> = feedApi1.postApiDetails(
+            feedReaderModel = FeedReaderModel(title = title!!,
+                    author = author!!,
+                    description = description!!,
+                    image = "https://d262ilb51hltx0.cloudfront.net/max/400/1*sxxTVuaXGa0AUdAyYhwwSw.jpeg"))
+
+            call1?.enqueue(object : Callback<FeedReaderModel>{
+                override fun onResponse(call: Call<FeedReaderModel>?, response: Response<FeedReaderModel>?) {
+                    Log.e(TAG,"POST OnResponce 1 : "+resultCode)
+                    if (response!!.isSuccessful){
+
+                        Log.e(TAG,"POST is sucess : "+resultCode)
+                        arrayList.add(response!!.body())
+                        feedAdapter.notifyItemInserted(arrayList.size)
+                        Log.e(TAG,"POST data "+resultCode)
+                    }
+                }
+
+                override fun onFailure(call: Call<FeedReaderModel>?, t: Throwable?) {
+
+                    Log.e(TAG,"On Failure :" +resultCode)
+                }
+
+
+            })
+
+
+
+/*
+                          val feedModel = FeedReaderModel(title = title!!,
                         author = author!!,
-                        description = description!!)
-
-                println("Feed Model  $feedModel")
+                        description = description!!,
+                        image = image!!)
 
                 arrayList.add(feedModel)
-                feedAdapter.notifyItemInserted(arrayList.size - 1)
+                feedAdapter.notifyItemInserted(arrayList.size-1)
+                println("Feed Model  $feedModel")
+
+*/
+
             }
         }
     }

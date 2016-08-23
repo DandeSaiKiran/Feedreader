@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class FeedClient {
 
     private val BASE_URL: String = "http://test.peppersquare.com/"
-    private var retrofit: Retrofit? = null
+    private var retrofit : Retrofit? = null
 
     fun getClient(): Retrofit{
         if (retrofit  == null){
@@ -17,4 +17,5 @@ class FeedClient {
         }
         return retrofit!!
     }
+
 }
