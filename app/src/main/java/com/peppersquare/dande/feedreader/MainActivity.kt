@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
                     feedAdapter.notifyDataSetChanged()
                 }
             }
-
             override fun onFailure(call: Call<List<FeedReaderModel>>?, t: Throwable?) {
             }
         })
@@ -53,13 +52,13 @@ class MainActivity : AppCompatActivity() {
                 val title = resultIntent?.getStringExtra("title")
                 val author = resultIntent?.getStringExtra("author")
                 val description = resultIntent?.getStringExtra("description")
-
+                val image = resultIntent?.getStringExtra("image")
                 val feedApi: FeedApi = FeedClient().getClient().create(FeedApi::class.java)
 
                 val feedModel = FeedReaderModel(title = title!!,
                         author = author!!,
                         description = description!!,
-                        image = "https://d262ilb51hltx0.cloudfront.net/max/400/1*sxxTVuaXGa0AUdAyYhwwSw.jpeg")
+                        image = image!!)
 
                 val call1: Call<FeedReaderModel> = feedApi.postApiDetails(feedReaderModel = feedModel)
 
