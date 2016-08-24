@@ -25,10 +25,14 @@ class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>) : RecyclerView.Adap
         return feedItems.size
     }
 
+
     override fun onBindViewHolder(holder: FeedHolder?, position: Int) {
         holder?.bindData(feedItems)
 
     }
+
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedHolder? {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feedlist, parent, false)
@@ -44,7 +48,9 @@ class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>) : RecyclerView.Adap
             itemView.textView_title.text = feedmodel.title
             itemView.textView_author.text = feedmodel.author
             itemView.textView_description.text = feedmodel.description
-            Picasso.with(itemView.context).load(feedmodel.image).into(itemView.imageView)
+            if(!feedmodel.image.isNullOrBlank()) {
+                Picasso.with(itemView.context).load(feedmodel.image).into(itemView.imageView)
+            }
         }
 
     }

@@ -5,10 +5,10 @@ import java.io.Serializable
 /**
  * Created by dande on 12-08-2016.
  */
-data class FeedReaderModel(val id: Int =0 ,
+data class FeedReaderModel(var id: Int? = null,
                            val title: String,
                            val author: String,
                            val description: String,
-                           val image: String  ,
+                           val image: String?,
                            val published: Boolean = true,
                            val likes: Int = 0)
