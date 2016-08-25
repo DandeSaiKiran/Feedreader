@@ -21,7 +21,7 @@ class PostData : AppCompatActivity() {
         setContentView(R.layout.activity_post_data)
 
         imageView1.setOnClickListener {
-            imageLink = "https://pbs.twimg.com/profile_images/651260268236812289/vbpawQ35_normal.png"
+            imageLink = "http://findicons.com/files/icons/1790/large_android/48/android.png"
         }
         imageView2.setOnClickListener {
 

@@ -25,35 +25,40 @@
 
                 <TextView
                     android:id="@+id/textView_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif"
                     android:text="Tittle"
                     android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textView_author"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Author"
+                    android:fontFamily="sans-serif"
                     android:textColor="@android:color/black"
                     android:textSize="30sp" />
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                 android:layout_margin="10dp"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"/>
+
+
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:text="description"
+            android:fontFamily="sans-serif"
             android:layout_weight="1"
             android:textSize="16sp" />
         <LinearLayout
@@ -80,6 +85,7 @@
 
 
     </LinearLayout>
+
 
 
 </android.support.v7.widget.CardView>

@@ -1,12 +1,16 @@
 package com.peppersquare.dande.feedreader
 
 import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.feedlist.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,20 +23,28 @@ class MainActivity : AppCompatActivity() {
     val arrayList = ArrayList<FeedReaderModel>()
     val feedAdapter = FeedAdapter(arrayList)
 
+    var progressDialog : ProgressDialog? = null
+    var isLoading: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
         recyclerView.adapter = feedAdapter
 
         val feedApi: FeedApi = FeedClient().getClient().create(FeedApi::class.java)
         val call: Call<List<FeedReaderModel>> = feedApi.getApiDetails("")
+        showDialog()
+
         call.enqueue(object : Callback<List<FeedReaderModel>> {
             override fun onResponse(call: Call<List<FeedReaderModel>>?, response: Response<List<FeedReaderModel>>) {
                 if (response.isSuccessful) {
+                    hideDialog()
                     arrayList.addAll(response.body().sortedByDescending { it.id  })
                     feedAdapter.notifyDataSetChanged()
+
+
                 }
             }
             override fun onFailure(call: Call<List<FeedReaderModel>>?, t: Throwable?) {
@@ -44,6 +56,21 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
+    fun showDialog(){
+        progressDialog = ProgressDialog(this)
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.setMessage("Loading please wait..")
+        progressDialog!!.show()
+    }
+
+    private fun hideDialog() {
+        isLoading = false
+        if (progressDialog != null) {
+            progressDialog!!.cancel()
+        }
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultIntent: Intent?) {
         if (requestCode == POST_REQUEST_CODE) {
@@ -62,10 +89,12 @@ class MainActivity : AppCompatActivity() {
 
                 val call1: Call<FeedReaderModel> = feedApi.postApiDetails(feedReaderModel = feedModel)
 
+                showDialog()
                 call1.enqueue(object : Callback<FeedReaderModel> {
                     override fun onResponse(call: Call<FeedReaderModel>?, response: Response<FeedReaderModel>) {
                         if (response.isSuccessful) {
 
+                            hideDialog()
                             feedModel.id = response.body().id
                             arrayList.add(0,feedModel)
                             feedAdapter.notifyItemInserted(0)
