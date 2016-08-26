@@ -11,4 +11,4 @@ data class FeedReaderModel(var id: Int? = null,
                            val description: String,
                            val image: String?,
                            val published: Boolean = true,
-                           val likes: Int = 0)
+                           var likes: Int = 0 )

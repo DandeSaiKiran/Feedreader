@@ -73,6 +73,11 @@
                 android:src="@drawable/like"
                 android:layout_marginLeft="250dp"
                 android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/text_likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
             <ImageView
                 android:id="@+id/imageView_share"
                 android:layout_width="wrap_content"

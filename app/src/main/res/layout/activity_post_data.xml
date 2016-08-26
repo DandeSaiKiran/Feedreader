@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:hint="Description" />
 
-      <RadioGroup
+      <!--<RadioGroup
           android:layout_width="match_parent"
           android:orientation="horizontal"
           android:layout_height="wrap_content">
@@ -57,8 +57,21 @@
               android:drawableStart="@drawable/image3"
               android:drawableLeft="@drawable/image3" />
 
-      </RadioGroup>
+      </RadioGroup>-->
 
+    <Button
+        android:id="@+id/upload_Image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Image"
+        android:layout_gravity="center"/>
+    <ImageView
+        android:id="@+id/previewImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/facebook"
+        android:layout_gravity="center"/>
     <Button
         android:id="@+id/postButton"
         android:layout_width="100dp"

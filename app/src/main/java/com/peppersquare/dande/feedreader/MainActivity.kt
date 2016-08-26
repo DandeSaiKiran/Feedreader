@@ -7,10 +7,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.feedlist.*
+import kotlinx.android.synthetic.main.feedlist.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -73,7 +75,9 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultIntent: Intent?) {
+        Log.d(TAG,"onActivityResult  called with requestCode $requestCode and resultCode $resultCode")
         if (requestCode == POST_REQUEST_CODE) {
+
             if (resultCode == Activity.RESULT_OK) {
 
                 val title = resultIntent?.getStringExtra("title")
@@ -82,11 +86,13 @@ class MainActivity : AppCompatActivity() {
                 val image = resultIntent?.getStringExtra("image")
                 val feedApi: FeedApi = FeedClient().getClient().create(FeedApi::class.java)
 
+                Log.d(TAG,"onActivityResult  resultIntent: title =  $title image = $image")
+
                 val feedModel = FeedReaderModel(title = title!!,
                         author = author!!,
                         description = description!!,
                         image = image!!)
-
+                Log.d(TAG,"likes: $title")
                 val call1: Call<FeedReaderModel> = feedApi.postApiDetails(feedReaderModel = feedModel)
 
                 showDialog()
