@@ -23,7 +23,7 @@ import java.util.*
 /**
  * Created by dande on 11-08-2016.
  */
-class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>) : RecyclerView.Adapter<FeedAdapter.FeedHolder>() {
+class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>,val feedItemListener:FeedItemListener) : RecyclerView.Adapter<FeedAdapter.FeedHolder>() {
 
     val TAG = "FeedAdapter"
     override fun getItemCount(): Int {
@@ -32,26 +32,23 @@ class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: FeedHolder?, position: Int) {
         holder?.bindData(feedItems)
-        Log.e(TAG,"onBindViewHolder $feedItems")
-
+        Log.e(TAG, "onBindViewHolder $feedItems")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedHolder? {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feedlist, parent, false)
-        return FeedHolder(view)
-        Log.e(TAG,"onCreateViewHolder $feedItems")
+        return FeedHolder(view,feedItemListener)
+        Log.e(TAG, "onCreateViewHolder $feedItems")
     }
 
-    class FeedHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var like: Int = 0
+    class FeedHolder(itemView: View,val feedItemListener: FeedItemListener) : RecyclerView.ViewHolder(itemView) {
         val TAG = "FeedHolder"
         fun bindData(feedItems: ArrayList<FeedReaderModel>) {
-
             val feedmodel = feedItems[adapterPosition]
-
             itemView.textView_title.text = feedmodel.title
             itemView.textView_author.text = feedmodel.author
             itemView.textView_description.text = feedmodel.description
+            itemView.likes.text = feedmodel.likes.toString()
 
             if (!feedmodel.image.isNullOrBlank()) {
                 val imageAsBytes = Base64.decode(feedmodel.image, Base64.NO_PADDING)
@@ -59,32 +56,30 @@ class FeedAdapter(val feedItems: ArrayList<FeedReaderModel>) : RecyclerView.Adap
                         BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.size))
                 Log.d(TAG, "bindData  $imageAsBytes")
             }
+
             itemView.imageView_like.setOnClickListener {
-                var i: Int = 1
-                if (i >= 0) {
-                    like = i++
-
-                    Log.e(TAG,"bindData : $like")
-
-                 //   itemView.text_likes.setText(like)
-                }
-
-                //feedmodel.likes = like!!
-                Toast.makeText(itemView.context, "likes $like", Toast.LENGTH_SHORT).show()
+                var likeCount = feedmodel.likes
+                likeCount = likeCount.plus(1)
+                feedmodel.likes = likeCount
+                itemView.likes.text = likeCount.toString()
+                feedItemListener.onLikeClicked(feedmodel)
             }
 
-            itemView.imageView_share.setOnClickListener {
 
+            itemView.imageView_share.setOnClickListener {
                 val intent = Intent()
-                intent.setAction(Intent.ACTION_SEND)
+                intent.action = Intent.ACTION_SEND
                 intent.putExtra(Intent.EXTRA_TEXT, feedmodel.title + "\n" + feedmodel.author + "\n" + feedmodel.description)
                 itemView.context.startActivity(Intent.createChooser(intent, "share the post"))
             }
-
         }
     }
 
+    interface FeedItemListener {
+        fun onLikeClicked(model: FeedReaderModel)
+    }
 }
+
 
 
 
